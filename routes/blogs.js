@@ -1,19 +1,36 @@
 const express = require("express");
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment")
+const fs = require("fs");
+const path = require("path");
 const router = express.Router();
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/blogs", async (req, res) => {
   const posts = await Blog.find();
   res.send(posts);
 });
 
-router.post("/blogs", async (req, res) => {
+router.post("/blogs",upload.single('image'), async (req, res) => {
   const post = new Blog({
     title: req.body.title,
     category: req.body.category,
     description:req.body.description,
-    image:req.body.image
+    image:{
+      data: fs.readFileSync(path.join(__dirname + '/../uploads/' + req.file.filename)),
+      contentType: req.file.mimetype
+    }
   });
   await post.save();
   res.send(post);

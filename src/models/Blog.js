@@ -5,7 +5,7 @@ const schema = mongoose.Schema({
   description: String,
   category:String,
   image: {data: Buffer, contentType: String},
-  likes:Number
+  created_on:{type:Date, default:new Date()}
 });
 
 export default mongoose.model("Blog", schema);

@@ -1,13 +1,13 @@
-const express = require("express")
-const Comment = require("../models/Comment")
+import express from "express";
+import Comment from "../../models/Comment.js";
 const router = express.Router()
 
-router.get('/comments',  async (req, res) => {
+router.get('/',  async (req, res) => {
     const comments = await Comment.find()
     res.send(comments)
 })
 
-router.post('/comments', async (req, res) => {
+router.post('/', async (req, res) => {
     const comment = new Comment({
         names:req.body.names,
         email:req.body.email,
@@ -18,7 +18,7 @@ router.post('/comments', async (req, res) => {
     res.send(comment)
 })
 
-router.get("/comments/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try{
         const comment = await Comment.findOne({_id : req.params.id})
         res. send(comment)
@@ -28,4 +28,4 @@ router.get("/comments/:id", async (req, res) => {
     }
 })
 
-module.exports = router
+export default router

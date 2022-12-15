@@ -1,10 +1,11 @@
-const express = require("express");
-const Blog = require("../models/Blog");
-const Comment = require("../models/Comment")
-const fs = require("fs");
-const path = require("path");
+import express from "express";
+import Blog from "../../models/Blog.js";
+import Comment from "../../models/Comment.js";
+import fs from "fs";
+import path from "path";
+import multer from "multer";
+
 const router = express.Router();
-const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -17,18 +18,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get("/blogs", async (req, res) => {
+router.get("/", async (req, res) => {
   const posts = await Blog.find();
   res.send(posts);
 });
 
-router.post("/blogs",upload.single('image'), async (req, res) => {
+router.post("/",upload.single('image'), async (req, res) => {
   const post = new Blog({
     title: req.body.title,
     category: req.body.category,
     description:req.body.description,
     image:{
-      data: fs.readFileSync(path.join(__dirname + '/../uploads/' + req.file.filename)),
+      data: fs.readFileSync(path.join(process.cwd() + '/uploads/' + req.file.filename)),
       contentType: req.file.mimetype
     }
   });
@@ -36,7 +37,7 @@ router.post("/blogs",upload.single('image'), async (req, res) => {
   res.send(post);
 });
 
-router.get("/blogs/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const post = await Blog.findOne({ _id: req.params.id });
     res.send(post);
@@ -46,7 +47,7 @@ router.get("/blogs/:id", async (req, res) => {
   }
 });
 
-router.patch("/blogs/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
     const post = await Blog.findOne({ _id: req.params.id });
 
@@ -72,7 +73,7 @@ router.patch("/blogs/:id", async (req, res) => {
   }
 });
 
-router.delete("/blogs/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await Blog.deleteOne({ _id: req.params.id });
     res.status(204).send();
@@ -81,7 +82,7 @@ router.delete("/blogs/:id", async (req, res) => {
     res.send({ error: "Blog doesn't exist!" });
   }
 });
-router.get("/blogs/:id/comments", async (req, res) => {
+router.get("/:id/comments", async (req, res) => {
   try{
     const comments = await Comment.find({blogId:req.params.id})
     res.send(comments)
@@ -91,7 +92,7 @@ router.get("/blogs/:id/comments", async (req, res) => {
   }
 
 })
-router.patch("/blogs/:id/like", async (req, res) => {
+router.patch("/:id/like", async (req, res) => {
   try {
     const post = await Blog.findOne({ _id: req.params.id });
 
@@ -108,7 +109,7 @@ router.patch("/blogs/:id/like", async (req, res) => {
     res.send({ error: error || 'blog does not exist' });
   }
 })
-router.patch("/blogs/:id/unlike", async (req, res) => {
+router.patch("/:id/unlike", async (req, res) => {
   try {
     const post = await Blog.findOne({ _id: req.params.id });
 
@@ -125,4 +126,4 @@ router.patch("/blogs/:id/unlike", async (req, res) => {
     res.send({ error: error || 'blog does not exist' });
   }
 })
-module.exports = router;
+export default router;

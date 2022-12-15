@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-const {Schema} = require("mongoose/lib/browser");
+import mongoose, {Schema} from 'mongoose'
 
 const schema = mongoose.Schema({
     blogId:{type:Schema.Types.ObjectId, ref:'Blog'},
@@ -7,4 +6,4 @@ const schema = mongoose.Schema({
     lovers:[{type:Schema.Types.ObjectId, ref:'User'}],
 })
 
-module.exports = mongoose.model('Like', schema)
+export default mongoose.model('Like', schema)

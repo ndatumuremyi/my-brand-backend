@@ -1,9 +1,10 @@
-const express = require("express")
-const Like = require("../models/Like")
-const User = require('../models/User')
+import express from "express";
+import Like from "../../models/Like.js";
+import User from "../../models/User.js";
+
 const router = express.Router();
 
-router.patch("/likes", async (req, res) =>{
+router.patch("/", async (req, res) =>{
     try {
         let like = await Like.findOne({ blogId: req.body.blogId });
         let user = await User.findOne({ browserId: req.body.browserId });
@@ -39,10 +40,6 @@ router.patch("/likes", async (req, res) =>{
         res.status(404)
         res.send({ error: error || 'something went wrong' });
     }
-    const like = new Like({
-        blogId:req.body.blogId,
-
-    })
 })
 
-module.exports = router;
+export default router;

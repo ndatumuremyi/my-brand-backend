@@ -1,22 +1,29 @@
 import User from "../models/User.js";
 import { signinToken, decode } from '../system/security/jwt.js';
+import bcrypt  from "bcryptjs"
+
 
 export class UserController {
    static async signUp(req, res){
        try {
            const obj = req.body
+           obj.password = bcrypt.hashSync(obj.password, 10)
            const user = await User.create(obj)
            return res.status(201).json(user)
        }catch (e) {
+           console.log()
            return res.status(500).json({error:"server error"})
        }
    }
    static async login(req, res){
        try {
-           const {email, password} = req.body
-           let user = await  User.findOne({email, password})
+           let {email, password} = req.body
+           let user = await  User.findOne({email})
            if(!user){
-               return res.status(403).json({error:"unAuthorized"})
+               return res.status(403).json({error:"no such user"})
+           }
+           if(!bcrypt.compareSync(password, user.password)){
+               return res.status(403).json({error:"password or email is incorrect"})
            }
            user.set("status", true)
            await user.save()

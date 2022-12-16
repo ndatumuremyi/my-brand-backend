@@ -8,9 +8,12 @@ export class BlogService {
         return blog
     }
     static async getBlog(id){
-        return Blog.findOne({_id: id});
+        return Blog.findOne({_id: id})
     }
     static async deleteBlog(id){
         return Blog.deleteOne({ _id: id })
+    }
+    static async findAllBlog(){
+        return Blog.find()
     }
 }

@@ -1,28 +1,25 @@
-import Like from "../models/Like.js";
-import User from "../models/User.js";
 import {LikeServices} from "../services/likeService.js";
 import {UserServices} from "../services/userService.js";
 
 export class LikeController {
     static async like(req, res){
         try {
-            let like = await LikeServices.findLikesByBlogId(req.body.blogId)
-            let user = await UserServices.findUserByBrowserId(req.body.browserId)
+            const {blogId, browserId} = req.body
+            let like = await LikeServices.findLikesByBlogId(blogId)
+            let user = await UserServices.findUserByBrowserId(browserId)
             if(!user){
-                user = new User({
+                user = UserServices.createUser({
                     email:"",
                     names:"",
-                    browserId:req.body.browserId
+                    browserId
                 })
-                await  user.save()
             }
             if(!like){
-                like = new Like({
-                    blogId:req.body.blogId,
+                like = LikeServices.createLike({
+                    blogId,
                     count: 1,
                     lovers:[user._id]
                 })
-                await like.save()
             }else {
                 let alreadyLike = await like.lovers.find(each => String(each) ===String(user._id) );
                 if(alreadyLike){
@@ -43,10 +40,11 @@ export class LikeController {
     }
     static async unLike(req, res){
         try {
-            let like = await LikeServices.findLikesByBlogId(req.body.blogId)
-            let user = await UserServices.findUserByBrowserId(req.body.browserId)
+            const {blogId, browserId} = req.body
+            let like = await LikeServices.findLikesByBlogId(blogId)
+            let user = await UserServices.findUserByBrowserId(browserId)
             if(!user || !like){
-                return res.status(200).json({error:"user doesn't liked the blog"})
+                return res.status(401).json({error:"user doesn't liked the blog"})
             }
             else {
                 let alreadyLike = await like.lovers.find(each => String(each) ===String(user._id) );
@@ -57,14 +55,12 @@ export class LikeController {
                     await like.save()
 
                 }else {
-                    res.send({message:'user doesn\'t liked the blog'})
-                    return
+                    return res.json({message:'user doesn\'t liked the blog'})
                 }
             }
-            res.send(like)
+            return res.json(like)
         }catch (error) {
-            res.status(404)
-            res.send({ error: error || 'something went wrong' });
+            return res.status(500).json({ error: error || 'something went wrong' });
         }
     }
 }

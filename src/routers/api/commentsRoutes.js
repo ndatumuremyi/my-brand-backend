@@ -1,31 +1,12 @@
 import express from "express";
-import Comment from "../../models/Comment.js";
+import {CommentController} from "../../controllers/commentController.js";
+import commentValidation from "../../validations/commentValidation.js";
 const router = express.Router()
 
-router.get('/',  async (req, res) => {
-    const comments = await Comment.find()
-    res.send(comments)
-})
+router.get('/',  CommentController.getAllComments)
 
-router.post('/', async (req, res) => {
-    const comment = new Comment({
-        names:req.body.names,
-        email:req.body.email,
-        comment: req.body.comment,
-        blogId:req.body.blogId
-    })
-    await comment.save()
-    res.send(comment)
-})
+router.post('/', commentValidation, CommentController.addComment)
 
-router.get("/:id", async (req, res) => {
-    try{
-        const comment = await Comment.findOne({_id : req.params.id})
-        res. send(comment)
-    }catch(e) {
-        res.status(404)
-        res.send({error:"Comment doesn't exist"})
-    }
-})
+router.get("/:id", CommentController.findOne)
 
 export default router

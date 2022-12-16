@@ -1,10 +1,7 @@
 import express from "express";
-import Blog from "../../models/Blog.js";
-import Comment from "../../models/Comment.js";
-import fs from "fs";
-import path from "path";
 import multer from "multer";
 import {BlogController} from "../../controllers/blogController.js";
+import blogValidation from "../../validations/blogValidation.js";
 
 const router = express.Router();
 

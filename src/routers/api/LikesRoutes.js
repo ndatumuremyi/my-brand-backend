@@ -1,11 +1,10 @@
 import express from "express";
-import Like from "../../models/Like.js";
-import User from "../../models/User.js";
 import {LikeController} from "../../controllers/likeController.js";
+import likeValidation from "../../validations/likeValidation.js";
 
 const router = express.Router();
 
-router.patch("/", LikeController.like)
-router.patch('/unlike', LikeController.unLike)
+router.patch("/",likeValidation, LikeController.like)
+router.patch('/unlike',likeValidation, LikeController.unLike)
 
 export default router;

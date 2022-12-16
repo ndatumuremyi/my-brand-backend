@@ -3,6 +3,7 @@ import morgan from "morgan"
 import mongoose from 'mongoose'
 import 'dotenv/config'
 import routes from "./routers/index.js";
+import {isAuth} from "./middlewares/authProtected.js";
 
 const  app = express();
 app.use(express.json());
@@ -26,6 +27,7 @@ try {
         })
 
     }
+    app.use(isAuth)
     app.use("/api/v1/", routes);
     app.use("*", (req, res) => {
         res.status(404).json({error: "resource not found"})

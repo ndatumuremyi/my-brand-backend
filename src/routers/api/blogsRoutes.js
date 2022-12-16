@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import {BlogController} from "../../controllers/blogController.js";
+import {CommentController} from "../../controllers/commentController.js";
 import blogValidation from "../../validations/blogValidation.js";
 
 const router = express.Router();
@@ -26,4 +27,5 @@ router.patch("/:id", BlogController.updateBlog);
 
 router.delete("/:id", BlogController.deleteBlog);
 router.get("/:id/comments",BlogController.getAllComments)
+router.post("/:id/comments", CommentController.addCommentFromBlog)
 export default router;

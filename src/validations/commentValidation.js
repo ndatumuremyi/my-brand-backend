@@ -1,7 +1,7 @@
-import joi from '@hapi/joi'
+import joi from 'joi'
 
 const commentValidation = (req, res, next) =>{
-    const commentSchema = joi.object({
+    const commentSchema = joi.object().keys({
         email:joi.string().required().messages({
             "any.required":"user email required",
         }),

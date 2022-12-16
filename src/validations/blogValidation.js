@@ -1,7 +1,7 @@
-import joi from '@hapi/joi'
+import joi from 'joi'
 
 const blogValidation = (req, res, next) =>{
-    const blogSchema = joi.object({
+    const blogSchema = joi.object().keys({
         title:joi.string().required().messages({
             "any.required":"Blog title is required",
         }),

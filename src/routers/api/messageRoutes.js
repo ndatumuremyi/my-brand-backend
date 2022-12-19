@@ -1,12 +1,10 @@
 import express from "express";
-import {CommentController} from "../../controllers/commentController.js";
-import commentValidation from "../../validations/commentValidation.js";
 import {MessageController} from "../../controllers/messageController.js";
+import messageValidation from "../../validations/messageValidation.js";
 const router = express.Router()
-
 router.get('/',  MessageController.getAll)
 
-router.post('/', MessageController.addOne)
+router.post('/',messageValidation, MessageController.addOne)
 
 router.get("/:id", MessageController.findOne)
 

@@ -5,16 +5,10 @@ import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 import './system/security/passport.js'
 import passport from "passport";
+import genToken from "./system/security/generateToken/index.js";
+import Authenticate from "./middlewares/passportAuthenticate.js";
 
 const app = express()
-const genToken = user => {
-    return jwt.sign({
-        iss: 'Joan_Louji',
-        sub: user.id,
-        iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate() + 1)
-    }, 'joanlouji');
-}
 app.use(bodyParser.json())
 app.get('/',(req,res)=>{
     res.send('Hello world')
@@ -40,7 +34,8 @@ mongoose.connection.once('open',function(){
 }).on('error',function(err){
     console.log('Mongo Error', err);
 })
-app.get('/secret', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+app.get('/secret',Authenticate, (req, res, next) => {
+    console.log("user",req.user)
     res.json("secret data")
 })
 app.listen(8000,()=>{

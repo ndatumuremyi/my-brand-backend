@@ -3,8 +3,8 @@ import multer from "multer";
 import {BlogController} from "../../controllers/blogController.js";
 import {CommentController} from "../../controllers/commentController.js";
 import blogValidation from "../../validations/blogValidation.js";
-import {protectedRoute} from "../../middlewares/authProtected.js";
 import {LikeController} from "../../controllers/likeController.js";
+import Authenticate from "../../middlewares/passportAuthenticate.js";
 
 const router = express.Router();
 
@@ -21,16 +21,16 @@ const upload = multer({ storage: storage });
 
 router.get("/", BlogController.findAllBlog);
 
-router.post("/",protectedRoute,
+router.post("/",Authenticate,
     // blogValidation,
     upload.single('image'), BlogController.createBlog);
 
 
 router.get("/:id", BlogController.getBlog);
 
-router.patch("/:id",protectedRoute, BlogController.updateBlog);
+router.patch("/:id",Authenticate, BlogController.updateBlog);
 
-router.delete("/:id",protectedRoute, BlogController.deleteBlog);
+router.delete("/:id",Authenticate, BlogController.deleteBlog);
 router.get("/:id/comments",BlogController.getAllComments)
 router.post("/:id/comments", CommentController.addCommentFromBlog)
 router.post("/:id/likes", LikeController.like);

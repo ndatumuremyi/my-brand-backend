@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import {UserServices} from "../services/userService.js";
 import {decode} from "../system/security/jwt.js";
+import passport from "passport";
 
 export const isAuth = (req, res, next) => {
     const authHeader = req.get('Authorization');
@@ -32,9 +33,9 @@ export const isAuth = (req, res, next) => {
 };
 
 export const protectedRoute = async (req, res, next) => {
-    if (!req.isAuth) {
-        return res.status(401).json({ message: 'unauthorized' });
-    }
+    // if (!req.isAuth) {
+    //     return res.status(401).json({ message: 'unauthorized' });
+    // }
     const { user } = req;
     try {
         const foundUser = await UserServices.findByPk(user.id);
@@ -44,7 +45,8 @@ export const protectedRoute = async (req, res, next) => {
             });
         }
         req.me = foundUser;
-        return next();
+        req.user = foundUser;
+        return passport.authenticate('jwt', {session:false});
     } catch (err) {
         return res.status(401).json({
             message: 'invalid token,login to get one',

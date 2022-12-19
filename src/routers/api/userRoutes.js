@@ -1,11 +1,12 @@
 import express from "express";
 import {UserController} from "../../controllers/userController.js";
-import {protectedRoute} from "../../middlewares/authProtected.js";
+import Authenticate from "../../middlewares/passportAuthenticate.js";
+import AuthValidation from "../../validations/signupValidation.js";
 
 const router = express.Router();
 
-router.post("/login", UserController.login)
-router.post('/signup', UserController.signUp)
-router.patch("/logout",protectedRoute, UserController.logout)
+router.post("/login",AuthValidation, UserController.login)
+router.post('/signup',AuthValidation, UserController.signUp)
+router.patch("/logout",Authenticate, UserController.logout)
 
 export default router;

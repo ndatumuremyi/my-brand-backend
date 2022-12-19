@@ -5,6 +5,7 @@ import 'dotenv/config'
 import routes from "./routers/index.js";
 import {isAuth} from "./middlewares/authProtected.js";
 import bodyParser from "body-parser";
+import './system/security/passport.js'
 
 const  app = express();
 app.use(express.json());

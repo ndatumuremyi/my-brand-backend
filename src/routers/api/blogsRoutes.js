@@ -21,7 +21,10 @@ const upload = multer({ storage: storage });
 
 router.get("/", BlogController.findAllBlog);
 
-router.post("/",protectedRoute,upload.single('image'), BlogController.createBlog);
+router.post("/",protectedRoute,
+    // blogValidation,
+    upload.single('image'), BlogController.createBlog);
+
 
 router.get("/:id", BlogController.getBlog);
 

@@ -13,6 +13,7 @@ export class BlogController {
     }
     static async createBlog(req, res){
         try {
+            console.log("message", req.body)
             const {title, category, description} = req.body
             const post = {
                 title,

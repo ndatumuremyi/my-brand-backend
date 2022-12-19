@@ -4,9 +4,11 @@ import mongoose from 'mongoose'
 import 'dotenv/config'
 import routes from "./routers/index.js";
 import {isAuth} from "./middlewares/authProtected.js";
+import bodyParser from "body-parser";
 
 const  app = express();
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"))
 const port = process.env.PORT || 5000;
 const mode = process.env.NODE_ENV || "development";

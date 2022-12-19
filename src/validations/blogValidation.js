@@ -15,7 +15,7 @@ const blogValidation = (req, res, next) =>{
             "any.required":"Blog Image is required",
         }),
     })
-
+    console.log(req.body)
     const value = blogSchema.validate(req.body);
     if(value.error){
         return res.status(400).json({

@@ -6,8 +6,14 @@ import routes from "./routers/index.js";
 import {isAuth} from "./middlewares/authProtected.js";
 import bodyParser from "body-parser";
 import './system/security/passport.js'
+import fileUpload from "express-fileupload"
 
 const  app = express();
+app.use(fileUpload(
+    {
+        useTempFiles: true
+    }
+));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"))

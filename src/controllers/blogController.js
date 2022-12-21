@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import {BlogService} from "../services/blogService.js";
 import {CommentService} from "../services/commentService.js";
+import cloudinari from "../utils/cludinary.js";
 export class BlogController {
     static async findAllBlog(req, res){
         try {
@@ -13,23 +14,22 @@ export class BlogController {
     }
     static async createBlog(req, res){
         try {
-            console.log("message", req.body)
-            const {title, category, description} = req.body
+            // console.log("message", req.body)
+            const {title, category, description} = req.body;
+            const imageUrl = await cloudinari.uploadPhoto(req,res,req.files.image);
+            // console.log("image url ----", imageUrl);
             const post = {
                 title,
                 category,
                 description,
-                image:{
-                    data: fs.readFileSync(path.join(process.cwd() + '/uploads/' + req.file.filename)),
-                    contentType: req.file.mimetype
-                },
+                image:imageUrl.url,
                 created_on: new Date()
             }
             const blog = await BlogService.createBlog(post);
             res.status(200).json({message:"Blog created",data:blog});
         }catch (error){
             console.log(error)
-            return res.status(500).json({error:'something went wrong'})
+            return res.status(500).json({message:'something went wrong',error:error.message})
         }
     }
     static async getBlog(req, res){

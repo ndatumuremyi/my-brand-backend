@@ -3,14 +3,15 @@ import {BlogController} from "../../controllers/blogController.js";
 import {CommentController} from "../../controllers/commentController.js";
 import {LikeController} from "../../controllers/likeController.js";
 import Authenticate from "../../middlewares/passportAuthenticate.js";
+import blogValidation from "../../validations/blogValidation.js";
 
 const router = express.Router();
 
-router.get("/", BlogController.findAllBlog);
+router.get("/",BlogController.findAllBlog);
 
-router.post("/",Authenticate, BlogController.createBlog);
+router.post("/",Authenticate,blogValidation, BlogController.createBlog);
 
-
+router.get("/random", BlogController.getRandom)
 router.get("/:id", BlogController.getBlog);
 
 router.patch("/:id",Authenticate, BlogController.updateBlog);

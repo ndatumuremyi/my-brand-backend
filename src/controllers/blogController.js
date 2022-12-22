@@ -40,6 +40,15 @@ export class BlogController {
             return res.status(404).json({ error: "Blog doesn't exist!" });
         }
     }
+    static async getRandom(req, res){
+        try {
+            const blogs = await BlogService.findAllBlog();
+            let index = Math.floor(Math.random() * blogs.length)
+            res.json(blogs[index]);
+        }catch (error){
+            return res.status(500).json({message:"something went wrong"})
+        }
+    }
     static async updateBlog(req, res){
         try {
             const post = BlogService.getBlog(req.params.id)

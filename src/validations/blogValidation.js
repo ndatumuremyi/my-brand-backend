@@ -11,9 +11,6 @@ const blogValidation = (req, res, next) =>{
         category:joi.string().required().messages({
             "any.required":"Blog category is required",
         }),
-        image:joi.object().required().messages({
-            "any.required":"Blog Image is required",
-        }),
     })
     console.log(req.body)
     const value = blogSchema.validate(req.body);

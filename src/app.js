@@ -22,14 +22,14 @@ const mode = process.env.NODE_ENV || "development";
 
 try {
     if(mode==='development'){
-        mongoose.connect(process.env.DB_URL, {useNewUrlParser:true}).then(() => {
+        mongoose.connect(process.env.DB_URL).then(() => {
             console.log("dev database connection established")
         }).catch(error => {
             console.log(error)
         })
     }
     if(mode === 'production'){
-        mongoose.connect(process.env.DB_URL, {useNewUrlParser:true}).then(() => {
+        mongoose.connect(process.env.DB_URL).then(() => {
             console.log("production database connection established")
         }).catch(error => {
             console.log(error)

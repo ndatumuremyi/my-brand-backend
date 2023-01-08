@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "jest --coverage --reporter=text",
-    "coverage": "jest report --reporter=text-lcov | coveralls"
+    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage": "jest report --reporter=text-lcov | ./node_modules/coveralls"
   },
   "keywords": [],
   "author": "Rahman Fadhil <rhmnfadhil@gmail.com> (https://rahmanfadhil.com/)",

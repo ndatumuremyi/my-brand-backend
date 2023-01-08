@@ -10,4 +10,7 @@ export class UserServices {
 
         return user
     }
+    static async findByPk(id){
+        return User.findOne({ _id: id });
+    }
 }

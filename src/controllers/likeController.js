@@ -2,9 +2,24 @@ import {LikeServices} from "../services/likeService.js";
 import {UserServices} from "../services/userService.js";
 
 export class LikeController {
+    static async countLike(req, res){
+        try {
+            let blogId = req.params.id;
+            let like = await LikeServices.findLikesByBlogId(blogId)
+
+            return res.status(200).json({count:like.count})
+        }catch (e) {
+            res.status(404)
+            return res.json({ error: e || 'something went wrong' });
+        }
+    }
     static async like(req, res){
         try {
-            const {blogId, browserId} = req.body
+            let blogId = req.params.id;
+            const {browserId} = req.body
+            if(!blogId){
+                blogId = req.body.blogId
+            }
             let like = await LikeServices.findLikesByBlogId(blogId)
             let user = await UserServices.findUserByBrowserId(browserId)
             if(!user){
@@ -35,7 +50,7 @@ export class LikeController {
             res.send(like)
         }catch (error) {
             res.status(404)
-            res.send({ error: error || 'something went wrong' });
+            return res.json({ error: error || 'something went wrong' });
         }
     }
     static async unLike(req, res){

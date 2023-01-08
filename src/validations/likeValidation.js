@@ -1,7 +1,7 @@
-import joi from '@hapi/joi'
+import joi from 'joi'
 
 const likeValidation = (req, res, next) =>{
-    const likeSchema = joi.object({
+    const likeSchema = joi.object().keys({
         blogId:joi.string().required().messages({
             "any.required":"blogId required",
         }),

@@ -4,5 +4,3 @@
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/ndatumuremyi/my-brand-backend/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/ndatumuremyi/my-brand-backend/tree/master)
 
-
-This is the source code of [my tutorial](https://rahmanfadhil.com/express-rest-api/)

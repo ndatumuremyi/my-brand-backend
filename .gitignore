@@ -96,4 +96,6 @@ public/
 
 .idea/
 
+
+tmp
 # End of https://www.gitignore.io/api/node

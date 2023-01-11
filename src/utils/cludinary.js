@@ -1,10 +1,9 @@
-import express from 'express'
 import { v4 as uuidv4 } from 'uuid';
 // const cloudinary = require('cloudinary').v2;
 import cloudinary from  'cloudinary';
 
 
-const app = express();
+// const app = express();
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUD_NAME,

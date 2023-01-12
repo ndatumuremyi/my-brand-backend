@@ -7,9 +7,12 @@ export class BlogController {
     static async findAllBlog(req, res){
         try {
             const blogs = await BlogService.findAllBlog();
-            res.json(blogs);
+            return res.status(200).json({
+                message:"fetch blog successful",
+                data:blogs
+            });
         }catch (error){
-            return res.status(500).json({message:"something went wrong"})
+            return res.status(500).json({error:"something went wrong"})
         }
     }
     static async createBlog(req, res){

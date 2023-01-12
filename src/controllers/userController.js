@@ -14,7 +14,6 @@ export class UserController {
            if (foundUser) {
                return res.status(403).json({ error: 'Email is already in use'});
            }
-           obj.password = bcrypt.hashSync(obj.password, 10)
            const user = await User.create(obj)
            return res.status(201).json(user)
        }catch (e) {
@@ -27,20 +26,23 @@ export class UserController {
            let {email, password} = req.body
            let user = await  User.findOne({email})
            if(!user){
-               return res.status(403).json({error:"no such user"})
+               throw {status:403, message:"no such use"}
            }
-           if(!bcrypt.compareSync(password, user.password)){
-               return res.status(403).json({error:"password or email is incorrect"})
+           if(!user.verifyPassword(password)){
+               throw {status:403, message:"password or email is incorrect"}
            }
            user.set("status", true)
            await user.save()
-           const payload = {email:user.email, id:user._id}
+
            // const token = await signinToken(payload)
            const token = genToken(user)
            console.log("token", token)
            return res.status(200).json({message: "login successful", token})
 
        }catch (error){
+           if(error.status){
+               return res.status(error.status).json({error:error.message})
+           }
            console.log("message", error.message)
            return res.status(500).json({error:"server error"})
        }
@@ -50,13 +52,16 @@ export class UserController {
            const {email, id} = req.user
            const user = await  User.findOne({email, _id:id})
            if(!user){
-               return res.status(401).json({error:"user not found"})
+               throw {status:404, error:"user not found"}
            }
            user.set("status", false)
            await user.save()
 
-           return res.json({message:"logout successful"})
+           return res.status(200).json({message:"logout successful"})
        }catch (error){
+           if(error?.status){
+               return res.status(error.status).json({error:error.message})
+           }
            return res.status(500).json({error:"server error"})
        }
    }

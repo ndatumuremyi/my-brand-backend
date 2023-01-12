@@ -1,7 +1,8 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
+orbs:
+  node: circleci/node@5.0.3
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -17,10 +18,45 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  build:
+    executor: node/default
+    docker:
+      - image: cimg/base:stable
+      - image: circleci/mongo:4.4
+        environment:
+          MONGO_USERNAME: mongouser
+          MONGO_PASSWORD: mongopass
+    steps:
+      - checkout
+      - run:
+          name: MongoDB Install
+          command: |
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+            echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+            sudo apt-get update
+            sudo apt-get install -y mongodb-org-shell
+      - setup_remote_docker
+      - run:
+          name: Waiting for Mongo
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      - checkout
+      - run: sudo npm install -g npm@latest
+      - run:
+          name: Make coverage
+          command: npm run coveralls
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
+
+  run-npm-command:
+    jobs:
+      - node/run:
+          npm-run: build
+      - node/run:
+          npm-run: test
+
   say-hello-workflow:
     jobs:
       - say-hello
+      - build

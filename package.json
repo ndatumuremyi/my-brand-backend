@@ -10,7 +10,7 @@
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "starts": "node --require @babel/polyfill ./dist/app.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "test:watch": "jest --watch",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "coverage": "jest report --reporter=text-lcov | ./node_modules/coveralls"
   },
   "keywords": [],

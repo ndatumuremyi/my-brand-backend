@@ -23,14 +23,10 @@ export class LikeController {
             let like = await LikeServices.findLikesByBlogId(blogId)
             let user = await UserServices.findUserByBrowserId(browserId)
             if(!user){
-                user = UserServices.createUser({
-                    email:"",
-                    names:"",
-                    browserId
-                })
+                user = await UserServices.createUser({email:"", names:"", browserId})
             }
             if(!like){
-                like = LikeServices.createLike({
+                like = await LikeServices.createLike({
                     blogId,
                     count: 1,
                     lovers:[user._id]
@@ -38,8 +34,7 @@ export class LikeController {
             }else {
                 let alreadyLike = await like.lovers.find(each => String(each) ===String(user._id) );
                 if(alreadyLike){
-                    res.send({message:'user already likes blog'})
-                    return
+                    throw {message:'user already likes blog', status:401}
                 }else {
                     like.count = like.count + 1
                     like.lovers = [...like.lovers, user._id]
@@ -47,19 +42,22 @@ export class LikeController {
                     await like.save()
                 }
             }
-            res.send(like)
+            return res.status(201).send({message:"Likes blog successful",data:like})
         }catch (error) {
-            res.status(404)
-            return res.json({ error: error || 'something went wrong' });
+            if(error.status){
+                return res.status(error.status).json({error: error.message})
+            }
+            return res.status(500).json({ error: error?.message || 'something went wrong' });
         }
     }
     static async unLike(req, res){
         try {
-            const {blogId, browserId} = req.body
+            let blogId = req.params.id;
+            const {browserId} = req.body
             let like = await LikeServices.findLikesByBlogId(blogId)
             let user = await UserServices.findUserByBrowserId(browserId)
             if(!user || !like){
-                return res.status(401).json({error:"user doesn't liked the blog"})
+                throw {status:401,message:'user doesn\'t liked the blog'}
             }
             else {
                 let alreadyLike = await like.lovers.find(each => String(each) ===String(user._id) );
@@ -70,12 +68,15 @@ export class LikeController {
                     await like.save()
 
                 }else {
-                    return res.json({message:'user doesn\'t liked the blog'})
+                    throw {status:401,message:'user doesn\'t liked the blog'}
                 }
             }
-            return res.json(like)
+            return res.status(201).json({message:"unlike successful",data:like})
         }catch (error) {
-            return res.status(500).json({ error: error || 'something went wrong' });
+            if(error.status){
+                return res.status(error.status).json({error:error.message});
+            }
+            return res.status(500).json({ error: error?.message || 'something went wrong' });
         }
     }
 }

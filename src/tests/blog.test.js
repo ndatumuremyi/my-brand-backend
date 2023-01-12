@@ -51,20 +51,49 @@ describe("/blogs", () => {
         const response = await Requests.CreateBlogNoFields(token);
         expect(response.statusCode).toBe(400)
     });
-    it('should should return 200 :GET /blogs/:id ', async function () {
-
+    it('should return 200 :GET /blogs/:id ', async function () {
         let blogs = await Blog.find();
-        console.log("randomBlog", blogs);
         const blog = blogs[0];
         const response = await Requests.GetBlogById(blog._id);
         expect(response.statusCode).toBe(200)
     });
-    it('should should return 200 :GET /blogs/:id/comments', async function () {
+    it('should return 200 :GET /blogs/:id/comments', async function () {
         let blogs = await Blog.find();
         console.log("randomBlog", blogs);
         const blog = blogs[0];
         const response = await Requests.GetBlogCommentS(blog._id);
         expect(response.statusCode).toBe(200)
     });
+    it("should return 201 :PATCH /blog/:id", async () => {
+        const {body: {data}} = await Requests.GetRandomBlog();
+        expect(data).toBeDefined();
+        const {body:{token}}  = await Requests.Login(user)
+        expect(token).toBeDefined();
+        const title = "edited"
+        const {statusCode, body:{data:blog}} = await request(app).patch(`/api/v1/blogs/${data._id}`).send({title}).set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(201)
+        expect(blog.title).toBe(title)
+    })
+    it("should return 201 :DELETE /blog/:id", async () => {
+        const {body: {data}} = await Requests.GetRandomBlog();
+        expect(data).toBeDefined();
+        const {body:{token}}  = await Requests.Login(user)
+        expect(token).toBeDefined();
+        const {statusCode} = await request(app).delete(`/api/v1/blogs/${data._id}`).set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(201)
+    })
+    it("should return <<INVALID BLOG>> 403 :DELETE /blog/:id", async () => {
+        const {body:{token}}  = await Requests.Login(user)
+        expect(token).toBeDefined();
+        const {statusCode} = await request(app).delete("/api/v1/blogs/dlakdjflkdjInvalid").set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(400)
+    })
+    it("should return 401 <<UNOTHORIZED>> :DELETE /blog/:id", async () => {
+        const {statusCode} = await request(app).delete("/api/v1/blogs/incorect")
+        expect(statusCode).toBe(401)
+    })
+
+
+
 
 })

@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import swaggerDoc from './swagger.js';
 import blogs from './blogs/index.js';
-
+import users from "./users/index.js";
+import messages from "./messages/index.js";
 const defaults = swaggerDoc.paths;
 
 dotenv.config();
@@ -15,6 +16,8 @@ const host =
 const paths = {
     ...defaults,
     ...blogs,
+    ...users,
+    ...messages,
 };
 
 const config = {

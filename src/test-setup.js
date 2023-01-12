@@ -1,6 +1,6 @@
 // test-setup.js
-import seedDatabase from "./seed/index.js";
 import mongoose from "mongoose";
+import seedDatabase from "./seed/index.js";
 // mongoose.set("useCreateIndex", true);
 // mongoose.promise = global.Promise;
 

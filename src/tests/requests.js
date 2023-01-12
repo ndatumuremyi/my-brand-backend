@@ -1,8 +1,5 @@
 import request from "supertest";
-// import app from "../server.js";
-import useApp from "./jest_s.js";
-const app = useApp;
-
+import app from "../server.js";
 export class Requests {
     static async Login(user){
         let sample = {
@@ -12,7 +9,7 @@ export class Requests {
         if(!user){
             user = sample;
         }
-        return  await request(app).post("/api/v1/users/login").send(user)
+        return request(app).post("/api/v1/users/login").send(user)
     }
     static async CreateBlog(tokenData){
         let blog = {
@@ -34,12 +31,12 @@ export class Requests {
     }
 
     static async GetRandomBlog(){
-        return  await request(app).get("/api/v1/blogs/random")
+        return request(app).get("/api/v1/blogs/random")
     }
     static async GetBlogById(id){
-        return  await request(app).get("/api/v1/blogs/"+id)
+        return request(app).get("/api/v1/blogs/"+id)
     }
     static async GetBlogCommentS(id){
-        return await request(app).get("/api/v1/blogs/"+id+"/comments")
+        return request(app).get("/api/v1/blogs/"+id+"/comments")
     }
 }

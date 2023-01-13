@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js --exec babel-node",
-    "build": "babel src --out-dir dist --extensions '.js' --source-maps inline",
-    "start": "node ./dist/app.js",
+    "build": "babel src --out-dir build --extensions '.js' --source-maps inline",
+    "start": "node ./build/app.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "coverage": "jest report --reporter=text-lcov | ./node_modules/coveralls"

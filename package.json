@@ -1,20 +1,18 @@
 {
   "name": "learn-express",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "dev": "nodemon src/app.js --exec babel-node",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
-    "starts": "node --require @babel/polyfill ./dist/app.js",
+    "start": "node ./dist/app.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "test:watch": "jest --watch",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "coverage": "jest report --reporter=text-lcov | ./node_modules/coveralls"
   },
   "keywords": [],
-  "author": "Rahman Fadhil <rhmnfadhil@gmail.com> (https://rahmanfadhil.com/)",
+  "author": "paterneN <paternenught@gmail.com> (https://paternen.dev/)",
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.19.3",
@@ -45,6 +43,7 @@
   },
   "devDependencies": {
     "babel-jest": "^29.3.1",
+    "babel-polyfill": "^6.26.0",
     "coveralls": "^3.1.1",
     "jest": "^29.3.1",
     "nodemon": "^2.0.20"

@@ -1,25 +1,10 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+
 orbs:
-  node: circleci/node@5.0.3
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+  node: circleci/node@5.0.2
+
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-  build:
-    executor: node/default
+  install-node-example:
     docker:
       - image: cimg/base:stable
       - image: circleci/mongo:4.4
@@ -28,6 +13,9 @@ jobs:
           MONGO_PASSWORD: mongopass
     steps:
       - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '16.13'
       - run:
           name: MongoDB Install
           command: |
@@ -39,24 +27,11 @@ jobs:
       - run:
           name: Waiting for Mongo
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
-      - checkout
-      - run: sudo npm install -g npm@latest
       - run:
-          name: Make coverage
-          command: npm run coveralls
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+          name: testing
+          command: yarn test
 workflows:
-
-  run-npm-command:
+  test_my_app:
     jobs:
-      - node/run:
-          npm-run: build
-      - node/run:
-          npm-run: test
+      - install-node-example
 
-  say-hello-workflow:
-    jobs:
-      - say-hello
-      - build

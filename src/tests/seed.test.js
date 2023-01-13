@@ -4,6 +4,7 @@ import Blog from "../models/Blog.js";
 import setupDB from "../test-setup.js";
 import blogs from "../seed/blog.seed.js";
 
+
 setupDB('seed', true)
 
 it('Seeding test', async () => {

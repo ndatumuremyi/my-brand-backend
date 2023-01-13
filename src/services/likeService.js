@@ -6,7 +6,6 @@ export class LikeServices {
     }
     static async createLike(data){
         let like = new Like(data)
-        await like.save()
-        return like
+        return like.save()
     }
 }

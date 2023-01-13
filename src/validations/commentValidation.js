@@ -9,9 +9,6 @@ const commentValidation = (req, res, next) =>{
         names:joi.string().required().messages({
             "any.required":"user names required",
         }),
-        blogId:joi.string().required().messages({
-            "any.required":"blogId required",
-        }),
         comment:joi.string().required().messages({
             "any.required":"comment required",
         }),

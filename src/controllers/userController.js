@@ -1,6 +1,4 @@
 import User from "../models/User.js";
-import { signinToken, decode } from '../system/security/jwt.js';
-import bcrypt  from "bcryptjs"
 import genToken from "../system/security/generateToken/index.js";
 
 
@@ -36,7 +34,6 @@ export class UserController {
 
            // const token = await signinToken(payload)
            const token = genToken(user)
-           console.log("token", token)
            return res.status(200).json({message: "login successful", token})
 
        }catch (error){

@@ -31,25 +31,3 @@ export const isAuth = (req, res, next) => {
     req.user = decodedToken;
     return next();
 };
-
-export const protectedRoute = async (req, res, next) => {
-    // if (!req.isAuth) {
-    //     return res.status(401).json({ message: 'unauthorized' });
-    // }
-    const { user } = req;
-    try {
-        const foundUser = await UserServices.findByPk(user.id);
-        if (!foundUser.status) {
-            return res.status(401).json({
-                message: 'logged out, login and try again',
-            });
-        }
-        req.me = foundUser;
-        req.user = foundUser;
-        return passport.authenticate('jwt', {session:false});
-    } catch (err) {
-        return res.status(401).json({
-            message: 'invalid token,login to get one',
-        });
-    }
-};

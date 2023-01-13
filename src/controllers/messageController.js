@@ -4,20 +4,25 @@ export class MessageController {
     static async getAll(req, res){
         try {
             const messages = await MessageService.findAll()
-            return res.json(messages)
+            return res.status(200).json({message:" get messages", data:messages})
         }catch (e) {
             return res.status(500).json({message:"something went wrong",error:e})
         }
     }
     static async addOne(req, res){
-        const {names, email, message} = req.body
-        const _comment = await MessageService
-            .createMessage({
-                names,
-                email,
-                message,
-            })
-        return res.json(_comment)
+        try {
+            const {names, email, message} = req.body
+            const _comment = await MessageService
+                .createMessage({
+                    names,
+                    email,
+                    message,
+                })
+
+            return res.status(201).json({data:_comment, message:"message received"})
+        }catch (err){
+            return res.status(500).json({error:"something went wrong"})
+        }
     }
     static async findOne(req, res){
         try{

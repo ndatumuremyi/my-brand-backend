@@ -6,11 +6,7 @@ export class UserServices {
     }
     static async createUser(userInfo){
         let user = new User(userInfo);
-        await user.save()
 
-        return user
-    }
-    static async findByPk(id){
-        return User.findOne({ _id: id });
+        return user.save()
     }
 }

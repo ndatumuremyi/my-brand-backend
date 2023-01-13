@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js --exec babel-node",
-    "build": "babel src --out-dir dist --source-maps inline --copy-files",
+    "build": "npm install -g npm@9.3.0 && babel src --out-dir dist --source-maps inline --copy-files",
     "start": "node ./dist/app.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",

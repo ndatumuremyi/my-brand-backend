@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js --exec babel-node",
-    "build": "npm install -g npm@9.3.0 && babel src --out-dir dist --source-maps inline --copy-files",
+    "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "start": "node ./dist/app.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
@@ -47,5 +47,9 @@
     "coveralls": "^3.1.1",
     "jest": "^29.3.1",
     "nodemon": "^2.0.20"
+  },
+  "engines": {
+    "node": "16.19.0 || 18.12.1",
+    "npm":"8.19.2 || 8.19.3 || 9.3.0"
   }
 }

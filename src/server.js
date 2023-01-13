@@ -15,7 +15,10 @@ app.use(fileUpload(
 ));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan("dev"))
+if(process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+// app.use(morgan("dev"))
 app.use(isAuth)
 app.use("/api/v1/", routes);
 app.use("*", (req, res) => {

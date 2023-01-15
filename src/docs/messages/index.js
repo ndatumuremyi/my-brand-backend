@@ -8,19 +8,16 @@ const messages = {
             summary: 'send Message',
             parameters: [
                 {
-                    in: 'formData',
-                    name: 'names',
+                    in: 'body',
+                    name: 'Message',
                     required: true,
-                },
-                {
-                    in: 'formData',
-                    name: 'email',
-                    required: true,
-                },
-                {
-                    in: 'formData',
-                    name: 'message',
-                    required: true,
+                    schema: {
+                        example: {
+                            names: 'Ndatumuremyi paterne',
+                            email: 'ndatumuremyi@gmail.com',
+                            message: 'you did great',
+                        },
+                    },
                 },
             ],
             consumes: ['application/json'],

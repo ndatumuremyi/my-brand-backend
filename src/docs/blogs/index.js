@@ -3,7 +3,7 @@ import responses from "../responses.js";
 const blogs = {
     '/blogs': {
         post: {
-            tags: ['Blogs'],
+            tags: ['Blog'],
             security: [
                 {
                     JWT: [],
@@ -64,8 +64,12 @@ const blogs = {
         },
         patch: {
             tags: ['Blog'],
-            security: [],
-            summary: 'Get udpate blogs',
+            security: [
+                {
+                    JWT: [],
+                },
+            ],
+            summary: 'Update blog',
             parameters: [{
                     in: 'path',
                     name: 'id',
@@ -76,22 +80,22 @@ const blogs = {
                 {
                     in: 'formData',
                     name: 'title',
-                    required: true,
+                    required: false,
                 },
                 {
                     in: 'formData',
                     name: 'category',
-                    required: true,
+                    required: false,
                 },
                 {
                     in: 'formData',
                     name: 'description',
-                    required: true,
+                    required: false,
                 },
                 {
                     name: 'image',
                     in: 'formData',
-                    required: true,
+                    required: false,
                     type: 'file',
                 },
             ],
@@ -100,7 +104,9 @@ const blogs = {
         },
         delete: {
             tags: ['Blog'],
-            security: [],
+            security: [{
+                JWT: [],
+            },],
             summary: 'delete one blogs',
             parameters: [{
                     in: 'path',
@@ -118,7 +124,7 @@ const blogs = {
     },
     '/blogs/{id}/like':{
         post: {
-            tags: ['Blogs'],
+            tags: ['Blog'],
             security: [],
             summary: 'like blog',
             parameters: [
@@ -146,12 +152,8 @@ const blogs = {
     },
     '/blogs/{id}/unlike':{
         post: {
-            tags: ['Blogs'],
-            security: [
-                {
-                    JWT: [],
-                },
-            ],
+            tags: ['Blog'],
+            security: [],
             summary: 'unlike blog',
             parameters: [
                 {
@@ -162,9 +164,14 @@ const blogs = {
                     },
                 },
                 {
-                    in: 'formData',
-                    name: 'browserId',
+                    in: 'body',
+                    name: 'like',
                     required: true,
+                    schema: {
+                        example: {
+                            browserId: 'id',
+                        },
+                    },
                 },
             ],
             consumes: ['application/json'],
@@ -173,7 +180,7 @@ const blogs = {
     },
     '/blogs/{id}/comments':{
         get: {
-            tags: ['Blogs'],
+            tags: ['Blog'],
             security: [],
             summary: 'get blog comments',
             parameters: [
@@ -189,7 +196,7 @@ const blogs = {
             responses,
         },
         post: {
-            tags: ['Blogs'],
+            tags: ['Blog'],
             security: [],
             summary: 'add blog comment',
             parameters: [
@@ -201,19 +208,16 @@ const blogs = {
                     },
                 },
                 {
-                    in: 'formData',
-                    name: 'names',
+                    in: 'body',
+                    name: 'Comment',
                     required: true,
-                },
-                {
-                    in: 'formData',
-                    name: 'email',
-                    required: true,
-                },
-                {
-                    in: 'formData',
-                    name: 'comment',
-                    required: true,
+                    schema: {
+                        example: {
+                            names: 'Ndatumuremyi paterne',
+                            email: 'ndatumuremyi@gmail.com',
+                            comment: 'you did great',
+                        },
+                    },
                 },
 
             ],

@@ -6,6 +6,7 @@ import {isAuth} from "./middlewares/authProtected.js";
 import bodyParser from "body-parser";
 import './system/security/passport.js'
 import fileUpload from "express-fileupload"
+import cors from 'cors';
 
 const  app = express();
 app.use(fileUpload(
@@ -14,6 +15,7 @@ app.use(fileUpload(
     }
 ));
 app.use(express.json());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 // app.use(morgan("dev"))

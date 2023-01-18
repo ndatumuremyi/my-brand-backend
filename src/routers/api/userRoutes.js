@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.post("/login",AuthValidation, UserController.login)
 router.post('/signup',AuthValidation, UserController.signUp)
-router.patch("/logout",Authenticate, UserController.logout)
+router.post("/logout",Authenticate, UserController.logout)
 
 export default router;

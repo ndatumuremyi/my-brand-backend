@@ -79,4 +79,30 @@ export class LikeController {
             return res.status(500).json({ error: error?.message || 'something went wrong' });
         }
     }
+    static async didILike(req, res){
+        try {
+            let blogId = req.params.id;
+            const {browserId} = req.body
+            if(!blogId){
+                blogId = req.body.blogId
+            }
+            let like = await LikeServices.findLikesByBlogId(blogId)
+            let user = await UserServices.findUserByBrowserId(browserId)
+            if(!user){
+                return res.status(200).json({message:"check successful", data:false})
+            }
+            if(!like){
+                return res.status(200).json({message:"check successful", data:false})
+            }else {
+                let alreadyLike = await like.lovers.find(each => String(each) ===String(user._id) );
+                return res.status(200).json({message:"check successful", data:!!alreadyLike})
+
+            }
+        }catch (error) {
+            if(error.status){
+                return res.status(error.status).json({error: error.message})
+            }
+            return res.status(500).json({ error: error?.message || 'something went wrong' });
+        }
+    }
 }

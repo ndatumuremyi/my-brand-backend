@@ -23,6 +23,7 @@ router.get("/:id/comments",BlogController.getAllComments)
 router.post("/:id/comments",commentValidation, CommentController.addCommentFromBlog)
 router.post("/:id/like",likeValidation, LikeController.like);
 router.post("/:id/unlike",likeValidation, LikeController.unLike);
+router.post("/:id/didILike",likeValidation, LikeController.didILike);
 
 router.get("/:id/likes", LikeController.countLike);
 

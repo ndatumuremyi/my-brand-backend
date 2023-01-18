@@ -3,6 +3,7 @@ import path from "path";
 import {BlogService} from "../services/blogService.js";
 import {CommentService} from "../services/commentService.js";
 import cloudinari from "../utils/cludinary.js";
+import {LikeServices} from "../services/likeService.js";
 export class BlogController {
     static async findAllBlog(req, res){
         try {
@@ -38,7 +39,9 @@ export class BlogController {
     static async getBlog(req, res){
         try {
             let blog  = await BlogService.getBlog(req.params.id)
-            return res.json({message:"blog gotten successful", data:blog});
+            const comments = await CommentService.findCommentByBlogId(req.params.id)
+            let likes = await LikeServices.findLikesByBlogId(req.params.id)
+            return res.json({message:"blog gotten successful", data:blog, comments,likes});
         } catch {
             return res.status(404).json({ error: "Blog doesn't exist!" });
         }

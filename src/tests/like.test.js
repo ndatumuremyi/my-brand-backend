@@ -53,6 +53,17 @@ describe("/like", () => {
         expect(status).toBe(401);
         expect(body).toHaveProperty("error");
     })
+    it("should return 200 :POST /blogs/:id/didILike", async () => {
+        const {body:{data : randomBlog}} = await Requests.GetRandomBlog();
+        expect(randomBlog).toBeDefined();
+        const browserId = getUniqueId();
+
+        const {statusCode, body} = await request(app).post(`/api/v1/blogs/${randomBlog._id}/like`).send({browserId})
+        expect(statusCode).toBe(201);
+
+        const response = await request(app).post(`/api/v1/blogs/${randomBlog._id}/didILike`).send({browserId})
+        expect(response.statusCode).toBe(200)
+    })
 
 
 })

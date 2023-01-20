@@ -99,9 +99,6 @@ export class LikeController {
 
             }
         }catch (error) {
-            if(error.status){
-                return res.status(error.status).json({error: error.message})
-            }
             return res.status(500).json({ error: error?.message || 'something went wrong' });
         }
     }

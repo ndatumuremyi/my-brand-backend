@@ -10,13 +10,15 @@ export class UserController {
            //Check If User Exists
            let foundUser = await User.findOne({ email });
            if (foundUser) {
-               return res.status(403).json({ error: 'Email is already in use'});
+               throw {message:'Email is already in use', status:403}
            }
            const user = await User.create(obj)
            return res.status(201).json(user)
        }catch (e) {
-           console.log()
-           return res.status(500).json({error:"server error"})
+           if(e.status){
+               return res.status(e.status).json({error:e.message})
+           }
+           return res.status(500).json({error:e.message || "server error"})
        }
    }
    static async login(req, res){
@@ -40,7 +42,6 @@ export class UserController {
            if(error.status){
                return res.status(error.status).json({error:error.message})
            }
-           console.log("message", error.message)
            return res.status(500).json({error:"server error"})
        }
    }
@@ -48,17 +49,11 @@ export class UserController {
        try {
            const {email, id} = req.user
            const user = await  User.findOne({email, _id:id})
-           if(!user){
-               throw {status:404, error:"user not found"}
-           }
            user.set("status", false)
            await user.save()
 
            return res.status(200).json({message:"logout successful"})
        }catch (error){
-           if(error?.status){
-               return res.status(error.status).json({error:error.message})
-           }
            return res.status(500).json({error:"server error"})
        }
    }

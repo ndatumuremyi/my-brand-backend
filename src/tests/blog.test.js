@@ -25,7 +25,6 @@ describe("/blogs", () => {
         }
         const {body:{token}}  = await Requests.Login(user)
 
-        console.log(token)
         const response = await request(app).post("/api/v1/blogs").set('Authorization', 'Bearer '+token)
             .attach("image", `${process.cwd()}/assets/images/clean_the_room.png`).field("description", blog.description)
             .field("category", blog.category).field("title", blog.title);
@@ -59,7 +58,6 @@ describe("/blogs", () => {
     });
     it('should return 200 :GET /blogs/:id/comments', async function () {
         let blogs = await Blog.find();
-        console.log("randomBlog", blogs);
         const blog = blogs[0];
         const response = await Requests.GetBlogCommentS(blog._id);
         expect(response.statusCode).toBe(200)

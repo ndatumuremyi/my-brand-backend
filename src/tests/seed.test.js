@@ -5,7 +5,7 @@ import setupDB from "../test-setup.js";
 import blogs from "../seed/blog.seed.js";
 
 
-setupDB('seed', true)
+setupDB('seedTesting', true)
 
 it('Seeding test', async () => {
     const users = await User.find()
